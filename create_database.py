@@ -1,14 +1,14 @@
-from engine_database import create_db, execute_query
+from sqlalchemy import create_engine
+from utils import queries, execute_query
+
+
+def createdb(url, script_path):
+    engine = create_engine(url, echo=True)
+    for query in queries(script_path):
+        engine.execute(query)
+
 
 if __name__ == '__main__':
-
-    with open('queries.txt', 'r') as f:
-        lines = f.readlines()
-
-    queries = [line.replace(';\n', ';') for line in lines]
-
     url = 'sqlite:///school.sqlite'
-
-    database = create_db(url)
-    for query in queries:
-        execute_query(database, query)
+    script_path = 'createdb.sql'
+    createdb(url, script_path)
